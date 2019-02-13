@@ -1,1 +1,1 @@
-web: gunicorn cetdc:app --log-file=-
+web: gunicorn sosb:app --log-file=-
