@@ -1,30 +1,37 @@
 from flask import Flask
 app = Flask(__name__)
 
-server_ip=''
-server_port=''
-client_ver='1'
+l=[]
+soscalls=[]
 
-@app.route('/server/<ip>/<port>')
-def server_side(ip,port):
-   global server_ip
-   global server_port
-   server_ip=ip
-   server_port=port
-   return 'DONE'
+@app.route('/add/<x>/<y>/<useid>')
+def adduser(x,y,useid):
+    global l
+    l=l+[[useid,x,y]]
+    return "done"
 
-@app.route('/clientver/<vers>')
-def clientver_side(vers):
-   global client_ver
-   client_ver=vers
-   return 'DONE'
+@app.route('/getsos/<uid>/<x>/<y>/<wh>/<sev>/<chk>')
+def getsos(uid,x,y,wh,sev,chk):
+    global soscalls
+    soscalls+=[[uid,x,y,wh,sev,chk]]
+    return "done"
 
-@app.route('/client')
-def client_side():
-   global server_ip
-   global server_port
-   global client_ver
-   return  '{} {} {}'.format(server_ip,server_port,client_ver) 
+@app.route('/delsos/<uid>')
+def delsos(uid):
+    global soscalls
+    for x in soscalls:
+        if x[0]==uid:
+            soscalls.pop(soscalls.index(x))
+    return "done"
+
+@app.route('/polsos')
+def polsos():
+    global soscalls
+    txt=""
+    for x in soscalls:
+        txt+=(" ").join(x) +":"
+    soscalls=[]    
+    return txt
 
 if __name__ == '__main__':
    app.run(debug = True)
